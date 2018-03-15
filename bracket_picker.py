@@ -2,7 +2,7 @@ import pprint
 import random
 
 pp = pprint.PrettyPrinter(indent=4)
-seed_vs_seed = {'1' : {'ovr' : 78.6}}
+seed_vs_seed = {}
 seed_num = '1'
 games = {   1  : {'Virginia'       : '1', 'UMBC' : '16'},
             2  : {'Creighton'      : '8', 'Kansas St.' : '9'},
@@ -45,11 +45,18 @@ rankings = { 'Virginia' : 1625, 'Villanova' : 1516, 'Xavier' : 1510, 'Mich State
             'New Mexico St.' : 1, 'Texas A&M' : 1
 
 }
+seed_output_file = open('seed_vs_seed2.txt', 'w')
+
+
 for line in open('seed_vs_seed.txt'):
     toks = line.split()
-    if len(toks) == 8:
+    print(line)
+    print(len(toks))
+    if len(toks) == 8 or len(toks) == 9:
+        print(toks)
         seed_num = toks[4][1:]
         seed_vs_seed[seed_num] = {'ovr' : float(toks[7][:-1])}
+        seed_output_file.write(seed_num + ',' + toks[7][:-1] + '\n')
     elif len(toks) == 4:
         opp_seed = toks[1][1:]
         win_percentage = float(toks[3][:-1])
@@ -57,17 +64,6 @@ for line in open('seed_vs_seed.txt'):
             seed_vs_seed[seed_num][opp_seed] = win_percentage
         else:
             seed_vs_seed[seed_num] = {opp_seed: win_percentage}
-
-for k, v in seed_vs_seed.items():
-    for k1, v1 in v.items():
-        if k1 == 'ovr':
-            continue
-        if v1 == 0.0:
-            if seed_vs_seed[k1][k] == 0.0:
-
-                seed_vs_seed[k][k1] = -1.0
-                seed_vs_seed[k1][k] = -1.0
-
 
 def get_winner(matchup):
     team1, team2 = matchup.keys()
@@ -123,8 +119,59 @@ def get_winner(matchup):
         else:
             return (team2, team2_seed)
 
+def simulate_round(games, round, verbose):
+    if verbose:
+        if round == 1:
+            print("Beginning calculations...\n")
+            print("Round of 64 games:")
+        elif round == 2:
+            print("\nRound of 32 games:")
+        elif round ==3:
+            print("\nSweet 16 games:")
+        elif round == 4:
+            print("\nElite Eight games:")
+        elif round == 5:
+            print("\nFinal Four games:")
+        elif round == 6:
+            print("\nChampion game:")   
+        pp.pprint(games)
+
+    # Calculate the winner
+    for game, matchup in games.items():
+        winner = get_winner(matchup)
+        games[game] = [winner[0], winner[1]]
+
+    # Update games dictionary
+    i = 1
+    game_num = 1
+    next_round_games = {}
+    if round < 6:
+        while i < len(games.keys()) + 1:
+            next_round_games[game_num] = {games[i][0] : games[i][1], games[i+1][0] : games[i+1][1]}
+            i += 2
+            game_num += 1
+
+    if verbose:
+        if round == 1:
+            print("\nRound of 64 winners:")
+        elif round == 2:
+            print("\nRound of 32 winners:")
+        elif round ==3:
+            print("\nSweet 16 winners:")
+        elif round == 4:
+            print("\nElite Eight winners:")
+        elif round == 5:
+            print("\nFinal Four winners:")
+        elif round == 6:
+            print("\nChampions:")
+            print(games.values()[0])
+            return games.values()[0][0]
+        pp.pprint(games)
+
+        return next_round_games
+
 def simulate_tournament(verbose):
-    games = {   1  : {'Virginia'       : '1', 'UMBC' : '16'},
+        games = {   1  : {'Virginia'       : '1', 'UMBC' : '16'},
             2  : {'Creighton'      : '8', 'Kansas St.' : '9'},
             3  : {'Kentucky'       : '5', 'Davidson' : '12'},
             4  : {'Arizona'        : '4', 'Buffalo' : '13'},
@@ -157,150 +204,24 @@ def simulate_tournament(verbose):
             31 : {'Rhode Island'   : '7', 'Oklahoma' : '10'},
             32 : {'Duke'           : '2', 'Iona' : '15'},
         }
-    if verbose:
-        print("Beginning calculations...\n")
-        print("Round of 64 games:")
 
-        pp.pprint(games)
+        for round in range(1, 7):
+            games = simulate_round(games, round, verbose)
+        return games
 
-    for game, matchup in games.items():
-        winner = get_winner(matchup)
-        games[game] = [winner[0], winner[1]]
+simulate_tournament(True)
 
-    if verbose:
-        print("\nRound of 64 winners:")
-        pp.pprint(games)
+def simulate_n_tournaments(n):
+    tournament_wins = {}
+    for i in range(n):
+        winner = simulate_tournament(False)
+        if winner in tournament_wins:
+            tournament_wins[winner] += 1
+        else:
+            tournament_wins[winner] = 1
 
-    i = 1
-    game_num = 1
-    temp_dict = {}
-    while i < len(games.keys()) + 1:
-        temp_dict[game_num] = {games[i][0] : games[i][1], games[i+1][0] : games[i+1][1]}
-        i += 2
-        game_num += 1
+    tournament_wins = sorted( ((v,k) for k,v in tournament_wins.iteritems()), reverse=True)
 
-    games = temp_dict
-
-    if verbose:
-        print("\nRound of 32 games:")
-        pp.pprint(games)
-
-    for game, matchup in games.items():
-        winner = get_winner(matchup)
-        games[game] = [winner[0], winner[1]]
-
-    if verbose:
-        print("\nRound of 32 winners:")    
-        pp.pprint(games)
-
-    i = 1
-    game_num = 1
-    temp_dict = {}
-    while i < len(games.keys()) + 1:
-        temp_dict[game_num] = {games[i][0] : games[i][1], games[i+1][0] : games[i+1][1]}
-        i += 2
-        game_num += 1
-
-    games = temp_dict
-
-    if verbose:
-        print("\nSweet Sixteen games:")
-        pp.pprint(games)
-
-    for game, matchup in games.items():
-        winner = get_winner(matchup)
-        games[game] = [winner[0], winner[1]]
-
-    if verbose:
-        print("\nSweet Sixteen winners:")    
-        pp.pprint(games)
-
-    i = 1
-    game_num = 1
-    temp_dict = {}
-    while i < len(games.keys()) + 1:
-        temp_dict[game_num] = {games[i][0] : games[i][1], games[i+1][0] : games[i+1][1]}
-        i += 2
-        game_num += 1
-
-    games = temp_dict
-
-    if verbose:
-        print("\nElite Eight games:")
-        pp.pprint(games)
-
-    for game, matchup in games.items():
-        winner = get_winner(matchup)
-        games[game] = [winner[0], winner[1]]
-        
-    if verbose:
-        print("\nElite Eight winners::")    
-        pp.pprint(games)
-
-    i = 1
-    game_num = 1
-    temp_dict = {}
-    while i < len(games.keys()) + 1:
-        temp_dict[game_num] = {games[i][0] : games[i][1], games[i+1][0] : games[i+1][1]}
-        i += 2
-        game_num += 1
-
-    games = temp_dict
-
-    if verbose:
-        print("\nFinal Four games:")
-        pp.pprint(games)
-
-    for game, matchup in games.items():
-        winner = get_winner(matchup)
-        games[game] = [winner[0], winner[1]]
-        
-    if verbose:
-        print("\nFinal Four winners:")    
-        pp.pprint(games)
-
-    i = 1
-    game_num = 1
-    temp_dict = {}
-    while i < len(games.keys()) + 1:
-        temp_dict[game_num] = {games[i][0] : games[i][1], games[i+1][0] : games[i+1][1]}
-        i += 2
-        game_num += 1
-
-    games = temp_dict
-
-    if verbose:
-        print("\nChampionship game:")
-        pp.pprint(games)
-
-    for game, matchup in games.items():
-        winner = get_winner(matchup)
-        games[game] = [winner[0], winner[1]]
-        
-    if verbose:
-        print("\nChampions:")    
-        pp.pprint(games)
-    return games.values()[0][0]
-
-tournament_wins = {}
-
-# pp.pprint(simulate_tournament(True))
-
-
-# Uncomment to simulate many tournaments
-for i in range(100000):
-    winner = simulate_tournament(False)
-    if winner in tournament_wins:
-        tournament_wins[winner] += 1
-    else:
-        tournament_wins[winner] = 1
-
-tournament_wins = sorted( ((v,k) for k,v in tournament_wins.iteritems()), reverse=True)
-
-print('\n\n\n After 100000 Simulations - Teams with wins:')
-pp.pprint(tournament_wins)
-
-
-
-
-
+    print('\n\n\n After 100000 Simulations - Teams with wins:')
+    pp.pprint(tournament_wins)
+    return winner
