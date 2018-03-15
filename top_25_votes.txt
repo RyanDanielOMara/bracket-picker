@@ -1,0 +1,40 @@
+Virginia,1625
+Villanova,1516
+Xavier,1510
+Mich State,1356
+Duke,1340
+Gonzaga,1254
+Michigan,1231
+Cincinnati,1213
+Kansas,1129
+Purdue,1096
+Wichita State,861
+North Carolina,852
+Tennessee,825
+Texas Tech,784
+Arizona,739
+Ohio St.,603
+West Virginia,486
+Clemson,422
+Houston,247
+Nevada,218
+Florida,192
+Miama (Fla.),191
+Rhode Island,86
+St. Bonaventure,72
+Kentucky,66
+TCU,45
+Loyola Chicago,43
+Virignia Tech,15
+Auburn,14
+Seton Hall,10
+Middle Tennessee,9
+Creighton,8
+Arkansas,4
+Nebraska,2
+NC State,2
+Kansas St.,2
+Texas A&M,1
+New Mexico St.,1
+Florida St.,1
+Buffalo,1

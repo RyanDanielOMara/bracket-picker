@@ -1,0 +1,32 @@
+Virginia,1,UMBC,16
+Creighton,8,Kansas St.,9
+Kentucky,5,Davidson,12
+Arizona,4,Buffalo,13
+Miama (Fla.),6,Loyola Chicago,11
+Tennessee,3,Wright State,14
+Nevada,7,Texas,10
+Cincinnati,2,Georgia State,15
+Xavier,1,NCC/TSU,16
+Missouri,8,Florida State,9
+Ohio St.,5,South Dakota St.,12
+Gonzaga,4,UNCG,13
+Houston,6,San Diego State,11
+Michigan,3,Montana,14
+Texas A&M,7,Providence,10
+North Carolina,2,Lipscomb,15
+Villanova,1,LIUB/RAD,16
+Virginia Tech,8,Alabama,9
+West Virginia,5,Murray State,12
+Wichita State,4,Marshall,13
+Florida,6,SBU/UCLA,11
+Texas Tech,3,SFA,14
+Arkansas,7,Butler,10
+Purdue,2,CSU Fullerton,15
+Kansas,1,Penn,16
+Seton Hall,8,NC State,9
+Clemson,5,New Mexico St.,12
+Auburn,4,Charleston,13
+TCU,6,ASU/SYR,11
+Mich. St.,3,Bucknell,14
+Rhode Island,7,Oklahoma,10
+Duke,2,Iona,15
