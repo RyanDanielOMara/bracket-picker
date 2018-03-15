@@ -1,7 +1,7 @@
 Virginia,1625
 Villanova,1516
 Xavier,1510
-Mich State,1356
+Mich. St.,1356
 Duke,1340
 Gonzaga,1254
 Michigan,1231
